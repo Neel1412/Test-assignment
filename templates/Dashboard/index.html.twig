@@ -1,0 +1,248 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<div class="container pt-20" style="background-color: ghostwhite;padding: 20px;">
+		<div class="container-fluid">
+			<form id="add_invoice" name="add_invoice" onsubmit="return false;">
+	            <fieldset>
+		    		<legend>Add Invoice Form:</legend>
+		    		<h3 class="text-center">
+		                Example Date
+		            </h3>
+					<div class="row">
+						<div class="col-xs-3 col-md-3">
+						</div>
+						<div class="col-xs-6 col-md-6">
+                            <span style="font-style: italic;">Please provide InternalInvoiceId, InvoiceAmount AND DueOn.</span>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bulk dataTable" cellspacing="0" style="margin-bottom: 12px;">
+                                        <thead class="hidden-xs hidden-sm">
+                                            <tr>
+                                                <th>Internal Invoice Id</th>
+                                                <th>Invoice Amount</th>
+                                                <th>Due On</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <b class="visible-xs visible-sm">Internal Invoice Id</b>
+                                                    <div>
+                                                        1
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <b class="visible-xs visible-sm">Invoice Amount</b>
+                                                    <div>
+                                                        100
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <b class="visible-xs visible-sm">Due On</b>
+                                                    <div>
+                                                        2019-05-20
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b class="visible-xs visible-sm">Internal Invoice Id</b>
+                                                    <div>
+                                                        2
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <b class="visible-xs visible-sm">Invoice Amount</b>
+                                                    <div>
+                                                        200.5
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <b class="visible-xs visible-sm">Due On</b>
+                                                    <div>
+                                                        2019-05-10
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                            	<td colspan="3">
+                                            		<a class="text-right" style="float: right;" href="/sample/sample-csv-upload-file-invoice.csv">Download sample csv file</a>
+                                            	</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+		    				<div class="alert alert-success" role="alert" style="display: none;padding: 5px;"></div>
+		    				<div class="alert alert-danger" role="alert" style="display: none;padding: 5px;"></div>
+							<div class="form-group">
+								<input id="uploadCSVFileInputKey" type="file" class="hide" name="csvfile">
+							    <button type="button" id="uploadCSVFileKey" class="btn btn-primary btn-lg btn-block">Choose File</button>
+							 </div>
+							 <div class="form-group" style="margin: 0px;">
+								 <span class="tip text-muted d-block"></span>
+								 <button type="button" class="btn btn-link d-block" id="uploadCSVFileKeyClear" style="display: none;">
+		                            <i class="material-icons">clear</i>
+		                        </button>
+	                        </div>
+						  	 <button type="submit" class="btn btn-primary">Submit</button>
+						</div>
+						<div class="col-xs-3 col-md-3">
+						</div>
+					</div>
+						
+				</fieldset>
+			</form>
+		</div>
+		<hr style="border: 1px solid;">
+		<h3 style="text-align: center;">
+	        List Invoices
+	    </h3>
+        <div class="row" style="max-height: 280px;overflow: auto;">
+            <div class="col-md-12">
+                <table class="table table-bulk dataTable" cellspacing="0">
+                    <thead class="hidden-xs hidden-sm">
+                        <tr>
+                        	<th>Sr</th>
+                            <th>Internal Invoice Id</th>
+                            <th>Invoice Amount</th>
+                            <th>Due On</th>
+                            <th>Sell Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+	                    {% if objInvoice|length > 0 %}
+	                    	{% for Invoice in objInvoice %}
+	                        <tr {% if loop.index % 2 == 0 %} style="background-color: lightgrey;" {% endif %}>
+	                        	<td>
+	                                <b class="visible-xs visible-sm">Sr</b>
+	                                <div>
+	                                    {{ loop.index }}
+	                                </div>
+	                            </td>
+	                            <td>
+	                                <b class="visible-xs visible-sm">Internal Invoice Id</b>
+	                                <div>
+	                                    {{ Invoice.internalInvoiceId }}
+	                                </div>
+	                            </td>
+	                            <td>
+	                                <b class="visible-xs visible-sm">Invoice Amount</b>
+	                                <div>
+	                                    {{ Invoice.invoiceAmount }}
+	                                </div>
+	                            </td>
+	                            <td>
+	                                <b class="visible-xs visible-sm">Due On</b>
+	                                <div>
+	                                    {{ Invoice.dueOn|date('Y-m-d') }}
+	                                </div>
+	                            </td>
+	                            <td>
+	                                <b class="visible-xs visible-sm">Sell Price</b>
+	                                <div>
+	                                    {{ Invoice.sellPrice }}
+	                                </div>
+	                            </td>
+	                        </tr>
+	                    	{% endfor %}
+	                    {% else %}
+	                    	<tr style="text-align: center;">
+	                    		<td colspan="5">
+	                    			<span>No data available</span>
+	                    		</td>
+	                    	</tr>
+	                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		var AddInVoice = '{{ path('add_inVoice_via_csv') }}';
+
+		$(document).ready(function(){
+			$('#uploadCSVFileKey').on('click', function() {
+			    $('#uploadCSVFileInputKey').click();
+			});
+			$('#uploadCSVFileInputKey').on('change', function(e) {
+			    var fileName = e.target.files[0].name;
+			    $('#add_invoice .text-muted').text(textAbstract(fileName, 40, " "));
+			    $('#add_invoice .text-muted').attr("data-original-title", fileName);
+			    $('#add_invoice .text-muted').attr("data-toggle", "tooltip");
+			    $('[data-toggle="tooltip"]').tooltip();
+			    $('#uploadCSVFileKeyClear').css('display','inline');
+			    /*if($(':input[type="submit"]').hasClass('disable-button')){
+			        $(':input[type="submit"]').removeClass('disable-button');
+			    }*/
+			});
+
+			$("#uploadCSVFileKeyClear").on('click', function() {
+			    $("#uploadCSVFileInputKey").val("");
+			    $('#add_invoice .text-muted').text("").attr("data-original-title", "");
+			    $(this).css('display','none');
+			});
+
+			$("#add_invoice").submit(function(e) {
+
+				$(':input[type="submit"]').prop('disabled', true);
+			    var form = document.getElementById("add_invoice");
+			    e.preventDefault();
+
+				$.ajax({
+			        url: AddInVoice,
+			        dataType: 'json',
+			        type: 'POST',
+			        processData: false,
+			        contentType: false,
+			        cache: false,
+			        data: new FormData(form),
+			        success: function(result) {
+			        	if( result.status == 'success' )
+			        	{
+					        sessionStorage.setItem('invoiceAddedSuccess', true);
+					        window.location.reload();
+			        	}
+			        	else
+			        	{
+			        		$('#add_invoice .alert-danger').html(result.message);
+			        		$('#add_invoice .alert-danger').show();
+			        		window.setTimeout(function() {
+					            $('#add_invoice .alert-danger').hide();
+					        }, 4000);
+			        	}
+			        	$(':input[type="submit"]').prop('disabled', false);
+			        },
+			    });
+			});
+
+			
+			if( sessionStorage.getItem('invoiceAddedSuccess') == 'true' )
+			{
+				$('#add_invoice .alert-success').html('Invoice added successfully.');
+        		$('#add_invoice .alert-success').show();
+        		window.setTimeout(function() {
+		            $('#add_invoice .alert-success').hide();
+		        }, 4000);
+		        sessionStorage.setItem('invoiceAddedSuccess', false);
+			}
+		});
+
+		function textAbstract(el, maxlength = 20, delimiter = " ") {
+		  let txt = el;
+		  if (txt == null) {
+		    return "";
+		  }
+		  if (txt.length <= maxlength) {
+		    return txt;
+		  }
+		  let t = txt.substring(0, maxlength);
+		  return t + "...";
+		}
+	</script>
+{% endblock %}
